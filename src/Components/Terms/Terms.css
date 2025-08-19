@@ -1,0 +1,30 @@
+.color-white{
+    color: white !important;
+}
+
+.Form-Container-terms{
+   width: 50%;
+   display: flex;
+   justify-content: center;
+}
+
+
+.space-just-to-fill{
+    height: 10vh;
+}
+
+.terms-font{
+    font-size: 1rem !important;
+}
+
+
+@media (max-width: 768px) {
+    .Form-Container-terms{
+        width: 90%;
+
+     }
+
+     .Order-Page-Container{
+        padding-top: 30px;
+     }
+}

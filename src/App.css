@@ -1,0 +1,15 @@
+.appContianer{
+  margin: 0px;
+  padding: 0px;
+  width: 100vw;
+  height: auto;
+  overflow: hidden;
+  background-color: #7ca6ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.margin-bottom{
+  margin-bottom: 10vh;
+}

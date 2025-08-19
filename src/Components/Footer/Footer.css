@@ -1,0 +1,40 @@
+.footer-v3 {
+    width: 100vw;
+    display: flex;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    
+    background-image: url('../../assets/bg-gradient-1.svg');
+    background-size: cover;    
+    background-position: center;
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+}
+
+.footer-v3-nav-link {
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
+.footer-v3-copyright {
+    width: 100%;
+    margin-top: 8px;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 auto;
+    -ms-flex: 0 auto;
+    flex: 0 auto;
+    color: hsla(0, 0%, 100%, 0.8);
+    font-size: 11px;
+    line-height: 20px;
+    text-align: center;
+}
