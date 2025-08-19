@@ -55,7 +55,7 @@ const Navbar = () => {
         </button>
 
         {/* Logo */}
-        <a href="index.html" className="logo desktop-only">
+        <a href="/" className="logo desktop-only">
           <img src={LogoImage} alt="Company Logo" className="logo-img" />
         </a>
 
