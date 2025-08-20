@@ -1,0 +1,112 @@
+/* Sidebar */
+.menu-sidebar {
+    width: 15vw;
+    height: 97vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background: #fff;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Header */
+  .menu-header {
+    width: 80%;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid rgb(9, 130, 236);
+    box-sizing: border-box;
+  }
+  
+  .menu-title {
+    font-size: 1.5rem;
+    font-family: sans-serif;
+    font-weight: 500;
+    color: rgb(63, 63, 63);
+    margin: 0;
+  }
+  
+  /* Menu List */
+  .menu-list {
+    width: 80%;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+    position: relative;
+  }
+  
+  /* Active State */
+  .menu-item.active {
+    font-weight: 600;
+    color: rgb(9, 130, 236);
+  }
+  
+  .menu-item.active .item-text {
+    color: rgb(9, 130, 236);
+  }
+  
+  /* Disabled (faded) */
+  .menu-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Green Dot for Active */
+  .green-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: green;
+    position: absolute;
+    left: -12px;
+  }
+  
+  /* Icon */
+  .item-icon {
+    font-size: 1.2rem;
+  }
+  
+  /* Text */
+  .item-text {
+    font-family: sans-serif;
+    font-size: 1rem;
+    color: rgb(63, 63, 63);
+  }
+  
+  /* Hover Effect */
+  .menu-item:not(.disabled):hover {
+    background: rgba(9, 130, 236, 0.1);
+    border-radius: 6px;
+    padding-left: 0.5rem;
+  }
+  
+
+  @media only screen and (max-width: 1024px) {
+    .menu-sidebar {
+      position: fixed;
+      top: 10;
+      left: 0;
+      width: 70vw;
+      max-width: 300px;
+      height: 100vh;
+      transform: translateX(-100%); /* Hidden */
+      z-index: 1000;
+    }
+  
+    .menu-sidebar.open {
+      transform: translateX(0); /* Slide in */
+    }
+  }
+  

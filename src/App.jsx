@@ -6,6 +6,7 @@ import AboutUs from "./Components/AboutUs/AboutUs";
 import ContactUs from "./Components/ContactUs/ContactUs";
 import Terms from "./Components/Terms/Terms";
 import { AppProvider } from "./Components/context.jsx";
+import PriceList from "./Components/Pricelist/PriceList.jsx";
 
 import "./App.css";
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/omoss.html" element={<AboutUs />} />
           <Route path="/kontaktaoss.html" element={<ContactUs />} />
           <Route path="/terms" element={<Terms/>} />
+          <Route path="/Pricelist" element={<PriceList/>} />
         </Routes>
       </BrowserRouter>
       </AppProvider>

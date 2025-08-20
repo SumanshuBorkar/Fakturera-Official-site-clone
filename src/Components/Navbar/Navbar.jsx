@@ -20,6 +20,7 @@ const Navbar = () => {
     { name: "About Us", path: "omoss.html" },
     { name: "Contact Us", path: "kontaktaoss.html" },
     { name: "Terms", path: "terms" },
+    { name: "Pricelist", path: "Pricelist" },
   ];
 
   // Close dropdown when clicked outside
