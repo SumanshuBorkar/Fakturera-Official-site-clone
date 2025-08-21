@@ -7,7 +7,7 @@ import ProductRow from "./ProductRow";
 import "./Table.css";
 import NewProductModal from "./NewProductModal";
 
-const API_URL = "https://fakturera-official-backend.onrender.com";
+const API_URL = "https://fakturera-official-backend.onrender.com/api/products";
 
 const Table = () => {
   const [products, setProducts] = useState([]);
@@ -38,7 +38,7 @@ const Table = () => {
     // Update just this field in the backend
     const productId = updated[index].id;
 
-    fetch(`${API_URL}/${productId}`, {
+    fetch(`https://fakturera-official-backend.onrender.com/api/products/${productId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated[index])
@@ -70,7 +70,7 @@ const Table = () => {
   };
 
   const handleModalCreate = (newProduct) => {
-    fetch("http://localhost:4000/api/products", {
+    fetch("https://fakturera-official-backend.onrender.com/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newProduct),
