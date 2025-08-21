@@ -1,20 +1,81 @@
+
 .color-white{
     color: white !important;
 }
+
+.heading-Terms{
+
+    color: rgb(255, 255, 255);
+    font-size: 2em;
+    font-family: sans-serif;
+    font-weight: 550;
+    letter-spacing: 2px;
+}
+
 
 .Form-Container-terms{
    width: 50%;
    display: flex;
    justify-content: center;
+   margin-bottom: 30px;
 }
 
+.trial-form-terms{
+    background: #fff;
+    width: 750px;
+    border-radius: 20px;
+    text-align: center;
+    transition: width 600ms ease-in-out;
+    padding: 40px 40px 40px 40px;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+    line-height: 1.5em;
+    font-size: 14px;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Submit-Button-Terms{
+    font-size: 1.125em;
+    margin-top: 1.5em;
+    border-radius: 3rem;
+    color: white;
+    font-weight: 500;
+    padding: 1rem 2rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    background-color: rgb(8, 158, 30);
+    cursor: pointer;
+    width: 35vw;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 40px;
+    padding-right: 40px;
+    min-width: max-content;
+    max-width: 270px;
+    border: none;
+}
 
 .space-just-to-fill{
     height: 10vh;
 }
 
 .terms-font{
-    font-size: 1rem !important;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+    line-height: 1.5em;
+    font-size: 14px;
 }
 
 
@@ -27,4 +88,12 @@
      .Order-Page-Container{
         padding-top: 30px;
      }
+
+     .heading-Terms{
+
+        color: rgb(255, 255, 255);
+        font-size: 1.5em;
+        font-family: sans-serif;
+        font-weight: 600;
+    }
 }

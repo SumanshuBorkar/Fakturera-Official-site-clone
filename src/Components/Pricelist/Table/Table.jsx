@@ -1,28 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../../assets/Search.png";
 import AddIcon from "../../../assets/AddIcon.png";
 import PrintIcon from "../../../assets/PrintiCON.png";
 import ToggleIcon from "../../../assets/ToggleIcon.png";
 import ProductRow from "./ProductRow";
-import products from "../Data/Products";
 import "./Table.css";
+import NewProductModal from "./NewProductModal";
+
+const API_URL = "https://fakturera-official-backend.onrender.com";
 
 const Table = () => {
-  const [selectedRow, setSelectedRow] = useState(null); 
+  const [products, setProducts] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch product list from backend on mount
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching products:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Editing product and updating it live to backend
   const updateProduct = (index, key, value) => {
-    setProducts((products) => {
-      const updated = [...products];
-      updated[index][key] = value;
-      return updated;
-    });
+    const updated = [...products];
+    updated[index][key] = value;
+    setProducts(updated);
+
+    // Update just this field in the backend
+    const productId = updated[index].id;
+
+    fetch(`${API_URL}/${productId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated[index])
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to update product");
+        return res.json();
+      })
+      .then((savedProduct) => {
+        // Keep UI in sync, necessary if backend auto-updates anything
+        setProducts((prev) => {
+          const next = [...prev];
+          next[index] = savedProduct;
+          return next;
+        });
+      })
+      .catch((err) => {
+        alert("Failed to save change to backend!");
+        console.error(err);
+      });
   };
+
+  const handleCreateNewProduct = () => {
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
+
+  const handleModalCreate = (newProduct) => {
+    fetch("http://localhost:4000/api/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProduct),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to create product");
+        return res.json();
+      })
+      .then((createdProduct) => {
+        setProducts((prevProducts) => [...prevProducts, createdProduct]);
+        setModalVisible(false);
+      })
+      .catch((err) => {
+        alert("Error creating new product!");
+        console.error(err);
+      });
+  };
+
+
+  if (loading) {
+    return <div className="table-container">Loading...</div>;
+  }
 
   return (
     <div className="table-container">
-      {/* 🔹 Top Section */}
+      {/* Top Section */}
       <div className="table-top">
-        {/* Left: Search Inputs */}
+        {/* Search Inputs */}
         <div className="table-search">
           <div className="search-box">
             <input type="text" placeholder="Search Article No" />
@@ -33,10 +109,9 @@ const Table = () => {
             <img src={Search} alt="Search" />
           </div>
         </div>
-
-      
+        {/* Actions */}
         <div className="table-actions">
-          <button className="action-btn">
+        <button className="action-btn" onClick={handleCreateNewProduct}>
             <span className="Desktop-only">New Product</span>
             <img src={AddIcon} alt="Add" />
           </button>
@@ -60,7 +135,7 @@ const Table = () => {
               <th className="Article-Cell mobileOnly">Article No ⬇️</th>
               <th className="Products-services">Product/Service</th>
               <th className="In-Price mobileOnly">In Price</th>
-              <th className="In-Price ">Price</th>
+              <th className="In-Price">Price</th>
               <th className="In-Price mobileOnly">Unit</th>
               <th className="In-Price mobileOnly">In Stock</th>
               <th className="Description mobileOnly">Description</th>
@@ -73,13 +148,18 @@ const Table = () => {
                 index={idx}
                 product={product}
                 onChange={updateProduct}
-                selected={selectedRow === idx}       // 🔹 is this row selected?
-                onSelect={() => setSelectedRow(idx)} // 🔹 handler for click
+                selected={selectedRow === idx}
+                onSelect={() => setSelectedRow(idx)}
               />
             ))}
           </tbody>
         </table>
       </div>
+      <NewProductModal
+        visible={modalVisible}
+        onClose={handleModalClose}
+        onCreate={handleModalCreate}
+      />
     </div>
   );
 };

@@ -12,16 +12,16 @@ const Terms = () => {
     <div className="Order-Page-Container">
       <Navbar />
 
-      <h2 className="heading-aboutSection highlited-Text color-white">
+      <h2 className="heading-Terms">
         {language === "English" ? "Terms" : "Villkor"}
       </h2>
 
-      <button onClick={() => navigate(-1)} className="submit-btn">
+      <button onClick={() => navigate(-1)} className="Submit-Button-Terms">
         {language === "English" ? "Close and Go Back" : "Stäng och gå tillbaka"}
       </button>
 
                 <div className="Form-Container-terms">
-                    <div className="trial-form">
+                    <div className="trial-form-terms">
                         <div className="section-description terms-font">
                            {
                             language === "English" ?  <div class="back-terms"><p class=""><b>BY</b> clicking Invoice Now, you choose to register according to the information that you have typed in and the text on the registration page and the terms here, and you at the same time accept the terms here.</p><p class="">You can use the program FOR FREE for 14 days.</p><p class="">123 Fakturera is so easy and self-explanatory that the chance that you will need support is minimal, but if you should need support, we are here for you, with our office manned for the most part of the day. After the trial period, the subscription continues and costs SEK 99 excluding VAT per month, which is billed annually.
@@ -34,7 +34,7 @@ const Terms = () => {
                     </div>
                 </div>
 
-                <button onClick={() => navigate(-1)} className="submit-btn margin-bottom">
+                <button onClick={() => navigate(-1)} className="Submit-Button-Terms margin-bottom">
         {language === "English" ? "Close and Go Back" : "Stäng och gå tillbaka"}
       </button>
      

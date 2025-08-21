@@ -4,7 +4,8 @@
   width: 100vw;
   height: auto;
   overflow: hidden;
-  background-color: #7ca6ff;
+  background-image: url('../../assets/HeroImage.jpg');
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
