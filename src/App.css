@@ -2,7 +2,7 @@
   margin: 0px;
   padding: 0px;
   width: 100vw;
-  height: auto;
+  height: 100dvh !important;
   overflow: hidden;
   background-image: url('../../assets/HeroImage.jpg');
   background-repeat: no-repeat;
@@ -13,4 +13,4 @@
 
 .margin-bottom{
   margin-bottom: 10vh;
-}
+} 

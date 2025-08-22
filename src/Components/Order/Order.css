@@ -1,6 +1,6 @@
 .Order-Page-Container {
   width: 100%;
-  min-height: 100dvh;
+  min-height: 100dvh !important;
   background-image: url("../../assets/HeroImage.jpg");
   background-repeat: no-repeat;
   background-size: cover;
