@@ -11,59 +11,84 @@ const Terms = () => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const container = containerRef.current;
+    const el = containerRef.current;
+    if (!el) return;
 
     let startY = 0;
-    let currentY = 0;
-    let isTouching = false;
+    let dragging = false;
+    let lastOrigin = "50% 0%"; // remember origin to avoid jump on release
+    const MAX_STRETCH = 0.06;   // 6% max
+    const DAMPING = 500;        // higher = less stretch
 
-    const handleTouchStart = (e) => {
+    const setScale = (scale, origin) => {
+      el.style.transformOrigin = origin;
+      el.style.transform = `scaleY(${scale})`;
+    };
+
+    const onTouchStart = (e) => {
+      if (!e.touches || e.touches.length === 0) return;
       startY = e.touches[0].clientY;
-      isTouching = true;
+      dragging = true;
+      // ensure no leftover transitions
+      el.style.transition = "";
     };
 
-    const handleTouchMove = (e) => {
-      if (!isTouching) return;
+    const onTouchMove = (e) => {
+      if (!dragging) return;
+      const currentY = e.touches[0].clientY;
+      const dy = currentY - startY;
 
-      currentY = e.touches[0].clientY;
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight;
-      const offsetHeight = container.offsetHeight;
+      const atTop = el.scrollTop <= 0;
+      const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
 
-      const isAtTop = scrollTop <= 0;
-      const isAtBottom = scrollTop + offsetHeight >= scrollHeight;
-
-      const distance = currentY - startY;
-
-      // stretch only when overscrolling
-      if ((isAtTop && distance > 0) || (isAtBottom && distance < 0)) {
-        e.preventDefault();
-        container.style.transform = `scaleY(${1 + Math.min(Math.abs(distance) / 600, 0.05)})`;
+      // Pulling down at top -> stretch downward from TOP edge
+      if (atTop && dy > 0) {
+        const stretch = Math.min(Math.abs(dy) / DAMPING, MAX_STRETCH);
+        lastOrigin = "50% 0%";
+        setScale(1 + stretch, lastOrigin);
+        return;
       }
+
+      // Pulling up at bottom -> stretch upward from BOTTOM edge
+      if (atBottom && dy < 0) {
+        const stretch = Math.min(Math.abs(dy) / DAMPING, MAX_STRETCH);
+        lastOrigin = "50% 100%";
+        setScale(1 + stretch, lastOrigin);
+        return;
+      }
+
+      // Normal in-bounds scroll -> no stretch
+      setScale(1, lastOrigin);
     };
 
-    const handleTouchEnd = () => {
-      isTouching = false;
-      container.style.transition = "transform 0.3s ease";
-      container.style.transform = "scaleY(1)";
-      setTimeout(() => {
-        container.style.transition = "";
-      }, 300);
+    const endStretch = () => {
+      dragging = false;
+      el.style.transition = "transform 220ms cubic-bezier(.2,.8,.2,1)";
+      setScale(1, lastOrigin);
+      // clear transition after it finishes to avoid affecting normal layout
+      const tid = setTimeout(() => {
+        el.style.transition = "";
+      }, 240);
+      return () => clearTimeout(tid);
     };
 
-    container.addEventListener("touchstart", handleTouchStart, { passive: false });
-    container.addEventListener("touchmove", handleTouchMove, { passive: false });
-    container.addEventListener("touchend", handleTouchEnd);
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: true });
+    el.addEventListener("touchend", endStretch, { passive: true });
+    el.addEventListener("touchcancel", endStretch, { passive: true });
 
     return () => {
-      container.removeEventListener("touchstart", handleTouchStart);
-      container.removeEventListener("touchmove", handleTouchMove);
-      container.removeEventListener("touchend", handleTouchEnd);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", endStretch);
+      el.removeEventListener("touchcancel", endStretch);
     };
   }, []);
-
   return (
     <div className="Terms-page-Container" ref={containerRef}>
+      
+      <div className="bg-fixed-layer" aria-hidden="true" />
+
       <Navbar />
 
       <h2 className="heading-Terms">
@@ -96,7 +121,9 @@ const Terms = () => {
           ? "Close and Go Back"
           : "Stäng och gå tillbaka"}
       </button>
-    </div>
+
+      </div>
+
   );
 };
 
