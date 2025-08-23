@@ -23,7 +23,7 @@ function App() {
     let startY = 0;
     let dragging = false;
     let lastOrigin = "50% 0%";
-    const MAX_STRETCH = 0.06; // 6%
+    const MAX_STRETCH = 0.06;
     const DAMPING = 500;
 
     const setScale = (scale, origin) => {
@@ -75,6 +75,7 @@ function App() {
       return () => clearTimeout(tid);
     };
 
+    // ✅ Immediate bounce when scroll reaches top/bottom (like Terms)
     const onScroll = () => {
       if (dragging) return;
 
