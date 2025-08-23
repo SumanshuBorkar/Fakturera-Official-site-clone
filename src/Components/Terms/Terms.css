@@ -1,3 +1,18 @@
+.Terms-page-Container {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent;
+  }
+
+  .margin-bottom{
+    margin-bottom: 7vh;
+  }
+  
 
 .color-white{
     color: white !important;

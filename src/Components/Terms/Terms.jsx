@@ -9,7 +9,7 @@ const Terms = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="Order-Page-Container">
+    <div className="Terms-page-Container">
       <Navbar />
 
       <h2 className="heading-Terms">

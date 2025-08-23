@@ -12,20 +12,23 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="appContianer">
-      <AppProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomeComponent />} />
-          <Route path="/bestall.html" element={<Order />} />
-          <Route path="/kunder.html" element={<OurCustomers />} />
-          <Route path="/omoss.html" element={<AboutUs />} />
-          <Route path="/kontaktaoss.html" element={<ContactUs />} />
-          <Route path="/terms" element={<Terms/>} />
-          <Route path="/Pricelist" element={<PriceList/>} />
-        </Routes>
-      </BrowserRouter>
-      </AppProvider>
+    <div className="appWrapper">
+      <div className="background-layer"></div>
+      <div className="appContainer">
+        <AppProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomeComponent />} />
+              <Route path="/bestall.html" element={<Order />} />
+              <Route path="/kunder.html" element={<OurCustomers />} />
+              <Route path="/omoss.html" element={<AboutUs />} />
+              <Route path="/kontaktaoss.html" element={<ContactUs />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/Pricelist" element={<PriceList />} />
+            </Routes>
+          </BrowserRouter>
+        </AppProvider>
+      </div>
     </div>
   );
 }
