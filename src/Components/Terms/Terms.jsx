@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useRef } from "react";
 import Navbar from "../Navbar/Navbar";
 import { AppContext } from "../context";
 import "./Terms.css";
+import { triggerBackgroundStretch } from "../../utils/backgroundStretch";
+
 
 const Terms = () => {
   const { language } = useContext(AppContext);
@@ -79,17 +81,21 @@ const Terms = () => {
       const atBottom =
         Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
 
-      if (atTop) {
-        lastOrigin = "50% 0%";
-        el.style.transition = "transform 200ms ease-out";
-        setScale(1.02, lastOrigin); // small bounce
-        setTimeout(() => setScale(1, lastOrigin), 200);
-      } else if (atBottom) {
-        lastOrigin = "50% 100%";
-        el.style.transition = "transform 200ms ease-out";
-        setScale(1.02, lastOrigin);
-        setTimeout(() => setScale(1, lastOrigin), 200);
-      }
+        if (atTop) {
+          lastOrigin = "50% 0%";
+          el.style.transition = "transform 200ms ease-out";
+          setScale(1.02, lastOrigin);
+          setTimeout(() => setScale(1, lastOrigin), 200);
+        
+          triggerBackgroundStretch("50% 0%"); // ✅ tell App to stretch bg
+        } else if (atBottom) {
+          lastOrigin = "50% 100%";
+          el.style.transition = "transform 200ms ease-out";
+          setScale(1.02, lastOrigin);
+          setTimeout(() => setScale(1, lastOrigin), 200);
+        
+          triggerBackgroundStretch("50% 100%"); // ✅ tell App to stretch bg
+        }
     };
 
     el.addEventListener("touchstart", onTouchStart, { passive: true });

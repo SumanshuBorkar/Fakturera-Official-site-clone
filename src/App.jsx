@@ -12,108 +12,33 @@ import { useEffect, useRef } from "react";
 import "./App.css";
 
 function App() {
-  const scrollRef = useRef(null);
   const bgRef = useRef(null);
 
   useEffect(() => {
-    const scrollEl = scrollRef.current;
     const bgEl = bgRef.current;
-    if (!scrollEl || !bgEl) return;
-
-    let startY = 0;
-    let dragging = false;
-    let lastOrigin = "50% 0%";
-    const MAX_STRETCH = 0.06;
-    const DAMPING = 500;
+    if (!bgEl) return;
 
     const setScale = (scale, origin) => {
       bgEl.style.transformOrigin = origin;
       bgEl.style.transform = `scaleY(${scale})`;
     };
 
-    const onTouchStart = (e) => {
-      if (!e.touches || e.touches.length === 0) return;
-      startY = e.touches[0].clientY;
-      dragging = true;
-      bgEl.style.transition = "";
+    const handleStretch = (e) => {
+      const origin = e.detail.origin; // comes from page
+      bgEl.style.transition = "transform 200ms ease-out";
+      setScale(1.02, origin);
+      setTimeout(() => setScale(1, origin), 200);
     };
 
-    const onTouchMove = (e) => {
-      if (!dragging) return;
-      const currentY = e.touches[0].clientY;
-      const dy = currentY - startY;
-
-      const atTop = scrollEl.scrollTop <= 0;
-      const atBottom =
-        Math.ceil(scrollEl.scrollTop + scrollEl.clientHeight) >=
-        scrollEl.scrollHeight;
-
-      if (atTop && dy > 0) {
-        const stretch = Math.min(Math.abs(dy) / DAMPING, MAX_STRETCH);
-        lastOrigin = "50% 0%";
-        setScale(1 + stretch, lastOrigin);
-        return;
-      }
-
-      if (atBottom && dy < 0) {
-        const stretch = Math.min(Math.abs(dy) / DAMPING, MAX_STRETCH);
-        lastOrigin = "50% 100%";
-        setScale(1 + stretch, lastOrigin);
-        return;
-      }
-
-      setScale(1, lastOrigin);
-    };
-
-    const endStretch = () => {
-      dragging = false;
-      bgEl.style.transition = "transform 220ms cubic-bezier(.2,.8,.2,1)";
-      setScale(1, lastOrigin);
-      const tid = setTimeout(() => {
-        bgEl.style.transition = "";
-      }, 240);
-      return () => clearTimeout(tid);
-    };
-
-    // ✅ Immediate bounce when scroll reaches top/bottom (like Terms)
-    const onScroll = () => {
-      if (dragging) return;
-
-      const atTop = scrollEl.scrollTop <= 0;
-      const atBottom =
-        Math.ceil(scrollEl.scrollTop + scrollEl.clientHeight) >=
-        scrollEl.scrollHeight;
-
-      if (atTop) {
-        lastOrigin = "50% 0%";
-        bgEl.style.transition = "transform 200ms ease-out";
-        setScale(1.02, lastOrigin);
-        setTimeout(() => setScale(1, lastOrigin), 200);
-      } else if (atBottom) {
-        lastOrigin = "50% 100%";
-        bgEl.style.transition = "transform 200ms ease-out";
-        setScale(1.02, lastOrigin);
-        setTimeout(() => setScale(1, lastOrigin), 200);
-      }
-    };
-
-    scrollEl.addEventListener("touchstart", onTouchStart, { passive: true });
-    scrollEl.addEventListener("touchmove", onTouchMove, { passive: true });
-    scrollEl.addEventListener("touchend", endStretch, { passive: true });
-    scrollEl.addEventListener("touchcancel", endStretch, { passive: true });
-    scrollEl.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("backgroundStretch", handleStretch);
 
     return () => {
-      scrollEl.removeEventListener("touchstart", onTouchStart);
-      scrollEl.removeEventListener("touchmove", onTouchMove);
-      scrollEl.removeEventListener("touchend", endStretch);
-      scrollEl.removeEventListener("touchcancel", endStretch);
-      scrollEl.removeEventListener("scroll", onScroll);
+      window.removeEventListener("backgroundStretch", handleStretch);
     };
   }, []);
 
   return (
-    <div className="appWrapper" ref={scrollRef}>
+    <div className="appWrapper">
       <div className="background-layer" ref={bgRef}></div>
       <div className="appContainer">
         <AppProvider>
