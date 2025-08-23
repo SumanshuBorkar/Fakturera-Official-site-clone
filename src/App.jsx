@@ -18,22 +18,83 @@ function App() {
     const bgEl = bgRef.current;
     if (!bgEl) return;
 
+    let lastOrigin = "50% 0%";
+    const MAX_STRETCH = 0.08; // max 8% stretch
+    const DAMPING = 250; // resistance while dragging
+
     const setScale = (scale, origin) => {
       bgEl.style.transformOrigin = origin;
       bgEl.style.transform = `scaleY(${scale})`;
     };
 
+    // ✅ Triggered from Terms/AboutUs via window.dispatchEvent
     const handleStretch = (e) => {
-      const origin = e.detail.origin; // comes from page
-      bgEl.style.transition = "transform 200ms ease-out";
+      const origin = e.detail.origin;
+      lastOrigin = origin;
+      bgEl.style.transition = "transform 220ms cubic-bezier(.2,.8,.2,1)";
       setScale(1.02, origin);
-      setTimeout(() => setScale(1, origin), 200);
+      setTimeout(() => setScale(1, origin), 220);
+    };
+
+    // ✅ Drag overscroll stretch
+    let startY = 0;
+    let dragging = false;
+
+    const onTouchStart = (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      startY = e.touches[0].clientY;
+      dragging = true;
+      bgEl.style.transition = "";
+    };
+
+    const onTouchMove = (e) => {
+      if (!dragging) return;
+      const currentY = e.touches[0].clientY;
+      const dy = currentY - startY;
+
+      const scrollTop = document.documentElement.scrollTop || window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+
+      const atTop = scrollTop <= 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight;
+
+      if (atTop && dy > 0) {
+        const stretch = Math.min(Math.abs(dy) / DAMPING, MAX_STRETCH);
+        lastOrigin = "50% 0%";
+        setScale(1 + stretch, lastOrigin);
+        return;
+      }
+
+      if (atBottom && dy < 0) {
+        const stretch = Math.min(Math.abs(dy) / DAMPING, MAX_STRETCH);
+        lastOrigin = "50% 100%";
+        setScale(1 + stretch, lastOrigin);
+        return;
+      }
+
+      setScale(1, lastOrigin);
+    };
+
+    const onTouchEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      bgEl.style.transition = "transform 220ms cubic-bezier(.2,.8,.2,1)";
+      setScale(1, lastOrigin);
     };
 
     window.addEventListener("backgroundStretch", handleStretch);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
     return () => {
       window.removeEventListener("backgroundStretch", handleStretch);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
     };
   }, []);
 
