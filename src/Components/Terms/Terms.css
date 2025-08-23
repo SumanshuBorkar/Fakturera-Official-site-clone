@@ -12,15 +12,6 @@
     transform: translateZ(0);
   }
 
-  
-  /* .bg-fixed-layer {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: url('/HeroImage.jpg') center center / cover no-repeat;
-    pointer-events: none;
-  }
-   */
 
   .margin-bottom{
     margin-bottom: 7vh;

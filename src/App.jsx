@@ -7,14 +7,52 @@ import ContactUs from "./Components/ContactUs/ContactUs";
 import Terms from "./Components/Terms/Terms";
 import { AppProvider } from "./Components/context.jsx";
 import PriceList from "./Components/Pricelist/PriceList.jsx";
+import { useEffect, useRef } from "react";
 
 import "./App.css";
 
 function App() {
+  const scrollRef = useRef(null);
+  const bgRef = useRef(null);
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current;
+    const bgEl = bgRef.current;
+
+    if (!scrollEl || !bgEl) return;
+
+    let isAnimating = false;
+
+    const handleScroll = () => {
+      if (isAnimating) return;
+
+      // check if at top or bottom
+      const atTop = scrollEl.scrollTop === 0;
+      const atBottom =
+        scrollEl.scrollHeight - scrollEl.scrollTop === scrollEl.clientHeight;
+
+      if (atTop || atBottom) {
+        isAnimating = true;
+        bgEl.classList.add("stretch");
+
+        setTimeout(() => {
+          bgEl.classList.remove("stretch");
+          isAnimating = false;
+        }, 400); // match animation duration
+      }
+    };
+
+    scrollEl.addEventListener("scroll", handleScroll);
+
+    return () => {
+      scrollEl.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="appWrapper">
-      <div className="background-layer"></div>
-      <div className="appContainer">
+      <div className="background-layer" ref={bgRef}></div>
+      <div className="appContainer" ref={scrollRef}>
         <AppProvider>
           <BrowserRouter>
             <Routes>

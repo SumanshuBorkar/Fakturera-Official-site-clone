@@ -109,7 +109,6 @@ const Terms = () => {
 
   return (
     <div className="Terms-page-Container" ref={containerRef}>
-      {/* <div className="bg-fixed-layer" aria-hidden="true" /> */}
 
       <Navbar />
 
