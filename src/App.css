@@ -3,7 +3,6 @@ html, body {
   padding: 0;
   height: 100dvh;
   width: 100%;
-  /* Prevent scroll bouncing on iOS */
   overscroll-behavior: none;
 }
 
@@ -12,22 +11,19 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  /* Use both fallbacks for better browser support */
-  min-height: 100vh;
-  min-height: 100dvh;
-  height: 100vh; /* Fallback */
-  height: 100dvh; /* Modern browsers */
+  /* Start with screen height - this will be set by JS to max viewport */
+  height: 100vh;
   background: url('/HeroImage.jpg') no-repeat center center;
   background-size: cover;
-  background-attachment: fixed; /* Keep background fixed during scroll */
-  /* Smoother transitions */
-  transition: transform 0.2s ease-out, height 0.1s ease-out;
+  background-attachment: fixed;
+  /* Only allow transform transitions, not height */
+  transition: transform 0.4s ease;
   -webkit-overflow-scrolling: touch;
   z-index: -1;
-  /* Prevent background from shrinking */
-  flex-shrink: 0;
-  /* Ensure background covers entire viewport */
-  will-change: transform, height;
+  /* Performance optimization */
+  will-change: transform;
+  /* Ensure it covers full area even when oversized */
+  min-height: 100vh;
 }
 
 .background-layer.stretch {
