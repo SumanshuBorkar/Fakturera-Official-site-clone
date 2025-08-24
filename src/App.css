@@ -45,9 +45,7 @@ html, body {
   position: relative;
   z-index: 1;
   width: 100%;
-  min-height: 100dvh;
-  min-height: 100vh; /* Fallback */
-  /* Better overflow handling */
+  min-height: 100dvh;  /* Better overflow handling */
   overflow: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
