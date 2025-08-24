@@ -3,49 +3,92 @@ html, body {
   padding: 0;
   height: 100dvh;
   width: 100%;
+  /* Prevent scroll bouncing on iOS */
+  overscroll-behavior: none;
 }
 
-
 .background-layer {
-  position: fixed;    /* ✅ immovable */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  /* Use both fallbacks for better browser support */
+  min-height: 100vh;
   min-height: 100dvh;
+  height: 100vh; /* Fallback */
+  height: 100dvh; /* Modern browsers */
   background: url('/HeroImage.jpg') no-repeat center center;
-  transition: transform 0.4s ease;
-  -webkit-overflow-scrolling: touch;
   background-size: cover;
-  z-index: -1;        /* behind everything */
+  background-attachment: fixed; /* Keep background fixed during scroll */
+  /* Smoother transitions */
+  transition: transform 0.2s ease-out, height 0.1s ease-out;
+  -webkit-overflow-scrolling: touch;
+  z-index: -1;
+  /* Prevent background from shrinking */
+  flex-shrink: 0;
+  /* Ensure background covers entire viewport */
+  will-change: transform, height;
 }
-
 
 .background-layer.stretch {
-  transform: scale(1.05); /* small stretch */
+  transform: scale(1.05);
 }
-
 
 .appContainer {
   position: relative;
   min-height: 100dvh;
+  min-height: 100vh; /* Fallback */
   width: 100%;
   display: flex;
   flex-direction: column;
+  /* Ensure content is always above background */
+  z-index: 1;
 }
-
-
 
 .appWrapper {
   position: relative;
   z-index: 1;
   width: 100%;
-  min-height: 100dvh !important;
+  min-height: 100dvh;
+  min-height: 100vh; /* Fallback */
+  /* Better overflow handling */
   overflow: hidden;
-  overflow-y: auto; /* scrolling container */
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* Prevent overscroll bounce that can cause visual glitches */
+  overscroll-behavior-y: none;
 }
 
+/* Additional styles for better mobile handling */
+@supports (height: 100dvh) {
+  html, body {
+    height: 100dvh;
+  }
+  
+  .background-layer {
+    min-height: 100dvh;
+    height: 100dvh;
+  }
+  
+  .appContainer {
+    min-height: 100dvh;
+  }
+  
+  .appWrapper {
+    min-height: 100dvh;
+  }
+}
 
-.background-layer.stretch {
-  transform: scale(1.05); /* small stretch */
+/* Ensure smooth scrolling */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fix for Safari address bar issues */
+@media screen and (max-width: 768px) {
+  .background-layer {
+    /* Slightly larger to prevent gaps during address bar transitions */
+    min-height: calc(100vh + 100px);
+    min-height: calc(100dvh + 100px);
+  }
 }
