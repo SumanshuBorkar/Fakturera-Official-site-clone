@@ -16,20 +16,7 @@ html, body {
   transition: transform 0.4s ease;
   -webkit-overflow-scrolling: touch;
   background-size: cover;
-  z-index: -1; 
-  will-change: transform;
-  /* behind everything */
-}
-
-.background-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: url('/HeroImage.jpg') no-repeat center center;
-  background-size: cover;
-  z-index: -1;
-  transition: transform 0.4s ease;
+  z-index: -1;        /* behind everything */
 }
 
 
