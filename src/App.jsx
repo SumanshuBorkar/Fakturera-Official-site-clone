@@ -7,12 +7,23 @@ import ContactUs from "./Components/ContactUs/ContactUs";
 import Terms from "./Components/Terms/Terms";
 import { AppProvider } from "./Components/context.jsx";
 import PriceList from "./Components/Pricelist/PriceList.jsx";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 import "./App.css";
 
 function App() {
   const bgRef = useRef(null);
+
+  // Improved background height update function
+  const updateBgHeight = useCallback(() => {
+    if (bgRef.current) {
+      // Use both window.innerHeight and visualViewport for better compatibility
+      const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      // Add a small buffer to prevent gaps
+      const adjustedHeight = Math.max(height, window.innerHeight) + 10;
+      bgRef.current.style.height = `${adjustedHeight}px`;
+    }
+  }, []);
 
   useEffect(() => {
     const bgEl = bgRef.current;
@@ -96,34 +107,40 @@ function App() {
     };
   }, []);
 
-  // Set background to always use the maximum possible viewport height
+  // Improved viewport height handling
   useEffect(() => {
-    const setMaxViewportHeight = () => {
-      if (bgRef.current) {
-        // Calculate the maximum possible height (when UI is hidden)
-        const maxHeight = Math.max(
-          window.screen.height,
-          window.innerHeight,
-          window.visualViewport ? window.visualViewport.height : 0
-        );
-        
-        // Set the background to always use this maximum height
-        bgRef.current.style.height = `${maxHeight}px`;
-      }
-    };
+    // Initial setup
+    updateBgHeight();
 
-    // Set immediately
-    setMaxViewportHeight();
+    // Multiple event listeners for better coverage
+    const events = ['resize', 'scroll', 'orientationchange'];
+    
+    // Visual viewport events (for modern browsers)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", updateBgHeight);
+      window.visualViewport.addEventListener("scroll", updateBgHeight);
+    }
 
-    // Only update on orientation change, not on scroll/resize
-    window.addEventListener('orientationchange', () => {
-      setTimeout(setMaxViewportHeight, 100); // Small delay for orientation to complete
+    // Fallback events for older browsers
+    events.forEach(event => {
+      window.addEventListener(event, updateBgHeight, { passive: true });
     });
 
+    // Additional scroll listener on document for immediate updates
+    document.addEventListener('scroll', updateBgHeight, { passive: true });
+
+    // Cleanup
     return () => {
-      window.removeEventListener('orientationchange', setMaxViewportHeight);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", updateBgHeight);
+        window.visualViewport.removeEventListener("scroll", updateBgHeight);
+      }
+      events.forEach(event => {
+        window.removeEventListener(event, updateBgHeight);
+      });
+      document.removeEventListener('scroll', updateBgHeight);
     };
-  }, []);
+  }, [updateBgHeight]);
 
   return (
     <div className="appWrapper">
