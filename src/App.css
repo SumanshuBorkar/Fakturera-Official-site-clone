@@ -1,88 +1,51 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100dvh;
+  height: 100%;
   width: 100%;
-  overscroll-behavior: none;
 }
 
+
 .background-layer {
-  position: fixed;
+  position: fixed;    /* ✅ immovable */
   top: 0;
   left: 0;
   width: 100%;
-  /* Start with screen height - this will be set by JS to max viewport */
-  height: 100vh;
+  height: 100%;
   background: url('/HeroImage.jpg') no-repeat center center;
-  background-size: cover;
-  background-attachment: fixed;
-  /* Only allow transform transitions, not height */
   transition: transform 0.4s ease;
   -webkit-overflow-scrolling: touch;
-  z-index: -1;
-  /* Performance optimization */
-  will-change: transform;
-  /* Ensure it covers full area even when oversized */
-  min-height: 100vh;
+  background-size: cover;
+  z-index: -1;        /* behind everything */
 }
 
+
 .background-layer.stretch {
-  transform: scale(1.05);
+  transform: scale(1.05); /* small stretch */
 }
+
 
 .appContainer {
   position: relative;
-  min-height: 100dvh;
-  min-height: 100vh; /* Fallback */
+  height: 100dvh !important;
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* Ensure content is always above background */
-  z-index: 1;
 }
+
+
 
 .appWrapper {
   position: relative;
   z-index: 1;
   width: 100%;
-  min-height: 100dvh;  /* Better overflow handling */
+  height: 100dvh !important;
   overflow: hidden;
-  overflow-y: auto;
+  overflow-y: auto; /* scrolling container */
   -webkit-overflow-scrolling: touch;
-  /* Prevent overscroll bounce that can cause visual glitches */
-  overscroll-behavior-y: none;
 }
 
-/* Additional styles for better mobile handling */
-@supports (height: 100dvh) {
-  html, body {
-    height: 100dvh;
-  }
-  
-  .background-layer {
-    min-height: 100dvh;
-    height: 100dvh;
-  }
-  
-  .appContainer {
-    min-height: 100dvh;
-  }
-  
-  .appWrapper {
-    min-height: 100dvh;
-  }
-}
 
-/* Ensure smooth scrolling */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Fix for Safari address bar issues */
-@media screen and (max-width: 768px) {
-  .background-layer {
-    /* Slightly larger to prevent gaps during address bar transitions */
-    min-height: calc(100vh + 100px);
-    min-height: calc(100dvh + 100px);
-  }
+.background-layer.stretch {
+  transform: scale(1.05); /* small stretch */
 }

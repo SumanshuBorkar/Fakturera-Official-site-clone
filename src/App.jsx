@@ -7,37 +7,27 @@ import ContactUs from "./Components/ContactUs/ContactUs";
 import Terms from "./Components/Terms/Terms";
 import { AppProvider } from "./Components/context.jsx";
 import PriceList from "./Components/Pricelist/PriceList.jsx";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 
 import "./App.css";
 
 function App() {
   const bgRef = useRef(null);
 
-  // Improved background height update function
-  const updateBgHeight = useCallback(() => {
-    if (bgRef.current) {
-      // Use both window.innerHeight and visualViewport for better compatibility
-      const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      // Add a small buffer to prevent gaps
-      const adjustedHeight = Math.max(height, window.innerHeight) + 10;
-      bgRef.current.style.height = `${adjustedHeight}px`;
-    }
-  }, []);
-
   useEffect(() => {
     const bgEl = bgRef.current;
     if (!bgEl) return;
 
     let lastOrigin = "50% 0%";
-    const MAX_STRETCH = 0.08;
-    const DAMPING = 250;
+    const MAX_STRETCH = 0.08; // max 8% stretch
+    const DAMPING = 250; // resistance while dragging
 
     const setScale = (scale, origin) => {
       bgEl.style.transformOrigin = origin;
       bgEl.style.transform = `scaleY(${scale})`;
     };
 
+    // ✅ Triggered from Terms/AboutUs via window.dispatchEvent
     const handleStretch = (e) => {
       const origin = e.detail.origin;
       lastOrigin = origin;
@@ -46,6 +36,7 @@ function App() {
       setTimeout(() => setScale(1, origin), 220);
     };
 
+    // ✅ Drag overscroll stretch
     let startY = 0;
     let dragging = false;
 
@@ -106,41 +97,6 @@ function App() {
       window.removeEventListener("touchcancel", onTouchEnd);
     };
   }, []);
-
-  // Improved viewport height handling
-  useEffect(() => {
-    // Initial setup
-    updateBgHeight();
-
-    // Multiple event listeners for better coverage
-    const events = ['resize', 'scroll', 'orientationchange'];
-    
-    // Visual viewport events (for modern browsers)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", updateBgHeight);
-      window.visualViewport.addEventListener("scroll", updateBgHeight);
-    }
-
-    // Fallback events for older browsers
-    events.forEach(event => {
-      window.addEventListener(event, updateBgHeight, { passive: true });
-    });
-
-    // Additional scroll listener on document for immediate updates
-    document.addEventListener('scroll', updateBgHeight, { passive: true });
-
-    // Cleanup
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", updateBgHeight);
-        window.visualViewport.removeEventListener("scroll", updateBgHeight);
-      }
-      events.forEach(event => {
-        window.removeEventListener(event, updateBgHeight);
-      });
-      document.removeEventListener('scroll', updateBgHeight);
-    };
-  }, [updateBgHeight]);
 
   return (
     <div className="appWrapper">
