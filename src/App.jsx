@@ -98,6 +98,22 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const updateBgHeight = () => {
+      if (bgRef.current) {
+        bgRef.current.style.height = `${window.visualViewport.height}px`;
+      }
+    };
+  
+    updateBgHeight();
+    window.visualViewport?.addEventListener("resize", updateBgHeight);
+  
+    return () => {
+      window.visualViewport?.removeEventListener("resize", updateBgHeight);
+    };
+  }, []);
+  
+
   return (
     <div className="appWrapper">
       <div className="background-layer" ref={bgRef}></div>
