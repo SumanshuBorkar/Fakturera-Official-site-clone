@@ -154,6 +154,9 @@ const Terms = () => {
           ? "Close and Go Back"
           : "Stäng och gå tillbaka"}
       </button>
+      <div className="filler">
+
+      </div>
     </div>
   );
 };
