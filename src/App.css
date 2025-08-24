@@ -39,7 +39,7 @@ html, body {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 100dvh !important;
+  min-height: 100dvh !important;
   overflow: hidden;
   overflow-y: auto; /* scrolling container */
   -webkit-overflow-scrolling: touch;
