@@ -10,19 +10,24 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  /* Use a large fixed height that won't change - set by JS */
+  height: 100vh;
+  /* Critical: Remove any transitions on height/transform for background */
+  transition: none !important;
   background: url('/HeroImage.jpg') no-repeat center center;
-  /* Remove transition for height changes to make it instant */
-  transition: transform 0.4s ease;
-  -webkit-overflow-scrolling: touch;
   background-size: cover;
+  -webkit-overflow-scrolling: touch;
   z-index: -1;
-  /* Add will-change for better performance during frequent updates */
-  will-change: height;
+  /* Ensure it always covers the full area */
+  min-height: 100vh;
+  /* Use screen height as reference instead of viewport */
+  min-height: 100svh; /* Small viewport height - excludes browser UI */
 }
 
+/* Only allow stretch transforms, not any other transitions */
 .background-layer.stretch {
-  transform: scale(1.05);
+  transform: scale(1.05) !important;
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1) !important;
 }
 
 .appContainer {
@@ -41,4 +46,21 @@ html, body {
   overflow: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Force background to use physical screen dimensions */
+@media screen {
+  .background-layer {
+    height: 100vh;
+    min-height: 100vh;
+    max-height: none;
+  }
+}
+
+/* Additional mobile-specific fix */
+@supports (-webkit-appearance: none) {
+  .background-layer {
+    height: calc(100vh + 100px);
+    min-height: calc(100vh + 100px);
+  }
 }
