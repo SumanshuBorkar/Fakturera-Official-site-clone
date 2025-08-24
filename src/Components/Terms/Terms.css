@@ -1,7 +1,7 @@
 .Terms-page-Container {
     width: 100%;
-    height: 100dvh;
-    overflow: visible;
+    min-height: 100dvh; /* Changed from height to min-height */
+    overflow-y: auto; /* Changed from visible to auto to allow scrolling */
     -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
@@ -10,28 +10,24 @@
     position: relative;
     will-change: transform;
     transform: translateZ(0);
-  }
-  
+    padding-bottom: 0; /* Reset any existing padding */
+}
 
-  .margin-bottom{
+.margin-bottom{
     margin-bottom: 7vh !important;
-  }
-  
- 
+}
 
 .color-white{
     color: white !important;
 }
 
 .heading-Terms{
-
     color: rgb(255, 255, 255);
     font-size: 2em;
     font-family: sans-serif;
     font-weight: 550;
     letter-spacing: 2px;
 }
-
 
 .Form-Container-terms{
    width: 50%;
@@ -80,6 +76,13 @@
     border: none;
 }
 
+/* Add a wrapper for the last button to ensure margin works */
+.Terms-page-Container > .Submit-Button-Terms.margin-bottom {
+    margin-bottom: 7vh !important;
+    /* Add flex-shrink to prevent it from being compressed */
+    flex-shrink: 0;
+}
+
 .space-just-to-fill{
     height: 10vh;
 }
@@ -98,19 +101,16 @@
     font-size: 14px;
 }
 
-
 @media (max-width: 768px) {
     .Form-Container-terms{
         width: 90%;
+    }
 
-     }
-
-     .Order-Page-Container{
+    .Order-Page-Container{
         padding-top: 30px;
-     }
+    }
 
-     .heading-Terms{
-
+    .heading-Terms{
         color: rgb(255, 255, 255);
         font-size: 1.5em;
         font-family: sans-serif;
