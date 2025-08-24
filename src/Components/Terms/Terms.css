@@ -1,6 +1,6 @@
 .Terms-page-Container {
     width: 100%;
-    min-height: 100dvh;
+    height: 100dvh;
     overflow: visible;
     -webkit-overflow-scrolling: touch;
     display: flex;
