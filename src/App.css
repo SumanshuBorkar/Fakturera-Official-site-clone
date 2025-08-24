@@ -1,29 +1,29 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100dvh !important;
+  height: 100%;
   width: 100%;
 }
 
-
 .background-layer {
-  position: fixed;    /* ✅ immovable */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 110dvh !important;
+  height: 100%;
   background: url('/HeroImage.jpg') no-repeat center center;
+  /* Remove transition for height changes to make it instant */
   transition: transform 0.4s ease;
   -webkit-overflow-scrolling: touch;
   background-size: cover;
-  z-index: -1;        /* behind everything */
+  z-index: -1;
+  /* Add will-change for better performance during frequent updates */
+  will-change: height;
 }
-
 
 .background-layer.stretch {
-  transform: scale(1.05); /* small stretch */
+  transform: scale(1.05);
 }
-
 
 .appContainer {
   position: relative;
@@ -33,19 +33,12 @@ html, body {
   flex-direction: column;
 }
 
-
-
 .appWrapper {
   position: relative;
   z-index: 1;
   width: 100%;
   height: 100dvh !important;
   overflow: hidden;
-  overflow-y: auto; /* scrolling container */
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-}
-
-
-.background-layer.stretch {
-  transform: scale(1.05); /* small stretch */
 }

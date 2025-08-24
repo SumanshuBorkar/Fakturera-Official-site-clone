@@ -19,15 +19,14 @@ function App() {
     if (!bgEl) return;
 
     let lastOrigin = "50% 0%";
-    const MAX_STRETCH = 0.08; // max 8% stretch
-    const DAMPING = 250; // resistance while dragging
+    const MAX_STRETCH = 0.08;
+    const DAMPING = 250;
 
     const setScale = (scale, origin) => {
       bgEl.style.transformOrigin = origin;
       bgEl.style.transform = `scaleY(${scale})`;
     };
 
-    // ✅ Triggered from Terms/AboutUs via window.dispatchEvent
     const handleStretch = (e) => {
       const origin = e.detail.origin;
       lastOrigin = origin;
@@ -36,7 +35,6 @@ function App() {
       setTimeout(() => setScale(1, origin), 220);
     };
 
-    // ✅ Drag overscroll stretch
     let startY = 0;
     let dragging = false;
 
@@ -95,6 +93,69 @@ function App() {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, []);
+
+  // Set background to always use the maximum possible viewport height
+  useEffect(() => {
+    const setMaxViewportHeight = () => {
+      if (bgRef.current) {
+        // Calculate the maximum possible height (when UI is hidden)
+        const maxHeight = Math.max(
+          window.screen.height,
+          window.innerHeight,
+          window.visualViewport ? window.visualViewport.height : 0
+        );
+        
+        // Set the background to always use this maximum height
+        bgRef.current.style.height = `${maxHeight}px`;
+      }
+    };
+
+    // Set immediately
+    setMaxViewportHeight();
+
+    // Only update on orientation change, not on scroll/resize
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setMaxViewportHeight, 100); // Small delay for orientation to complete
+    });
+
+    return () => {
+      window.removeEventListener('orientationchange', setMaxViewportHeight);
+    };
+  }, []);
+
+  // Add real-time background height adjustment during scroll
+  useEffect(() => {
+    const updateBgHeight = () => {
+      if (bgRef.current) {
+        const currentHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        bgRef.current.style.height = `${currentHeight}px`;
+      }
+    };
+
+    // Update immediately
+    updateBgHeight();
+
+    // Update during scroll - this is the key fix!
+    const handleScroll = () => {
+      requestAnimationFrame(updateBgHeight);
+    };
+
+    // Listen to both window scroll and visualViewport changes
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
+    
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateBgHeight);
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', updateBgHeight);
+      }
     };
   }, []);
 
