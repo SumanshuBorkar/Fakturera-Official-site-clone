@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Changed from space-around to flex-start */
+    justify-content: flex-start; 
     background: transparent;
     position: relative;
     will-change: transform;
@@ -16,12 +16,12 @@
 .filler{
     width: 100%;
     height: 5vh;
-    flex-shrink: 0; /* Prevent the filler from shrinking */
-    background: transparent; /* Make sure it's invisible but takes space */
+    flex-shrink: 0;
+    background: transparent;
 }
 
 .margin-bottom{
-    margin-bottom: 0 !important; /* Remove margin since we're using filler instead */
+    margin-bottom: 0 !important; 
 }
 
 .color-white{
@@ -83,10 +83,8 @@
     border: none;
 }
 
-/* Add a wrapper for the last button to ensure margin works */
 .Terms-page-Container > .Submit-Button-Terms.margin-bottom {
     margin-bottom: 7vh !important;
-    /* Add flex-shrink to prevent it from being compressed */
     flex-shrink: 0;
 }
 
